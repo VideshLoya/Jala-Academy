@@ -1,5 +1,4 @@
 # 2. OPERATORS
-# ========================================
 
 # 1. Arithmetic operators function
 print("1. Arithmetic Operators:")
