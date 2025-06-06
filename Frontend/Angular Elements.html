@@ -1,0 +1,310 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>AngularJS Form, Validation, Animation, and Routing Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Form Styles */
+        .form-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        input.ng-invalid.ng-touched {
+            border: 1px solid red;
+        }
+
+        /* Animations for ng-show/ng-hide */
+        .animate-show-hide {
+            transition: all 0.5s ease;
+        }
+        .animate-show-hide.ng-hide {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        .animate-show-hide.ng-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .nav {
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        .nav a:hover {
+            color: #4CAF50;
+        }
+
+        /* Table Styles */
+        .table-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .odd {
+            background-color: #f9f9f9;
+        }
+        .even {
+            background-color: #ffffff;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            .form-container, .table-container {
+                width: 95%;
+            }
+            table {
+                font-size: 14px;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .form-container, .table-container {
+                width: 100%;
+            }
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body ng-controller="MainCtrl">
+    <!-- Navigation -->
+    <div class="nav">
+        <a href="#!/home">Home</a>
+        <a href="#!/form">Form</a>
+        <a href="#!/data">Data</a>
+    </div>
+
+    <!-- View Content -->
+    <div ng-view></div>
+
+    <script>
+        angular.module('myApp', ['ngRoute', 'ngAnimate'])
+        .config(['$routeProvider', function($routeProvider) {
+            $routeProvider
+                .when('/home', {
+                    template: `
+                        <h2>Home Page</h2>
+                        <div class="form-container">
+                            <p>Welcome to the AngularJS Demo!</p>
+                            <p>This application demonstrates form elements, validation, animations, and routing.</p>
+                        </div>
+                    `
+                })
+                .when('/form', {
+                    template: `
+                        <h2>Form with Validation</h2>
+                        <div class="form-container">
+                            <form name="userForm" ng-submit="submitForm()" novalidate>
+                                <div class="form-group">
+                                    <label for="username">Username (must contain a number):</label>
+                                    <input type="text" id="username" name="username" ng-model="formData.username" 
+                                        required has-number ng-class="{ 'ng-invalid': userForm.username.$error.hasNumber }">
+                                    <span class="error" ng-show="userForm.username.$touched && userForm.username.$error.required">
+                                        Username is required!
+                                    </span>
+                                    <span class="error" ng-show="userForm.username.$touched && userForm.username.$error.hasNumber">
+                                        Username must contain at least one number!
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email" ng-model="formData.email" required>
+                                    <span class="error" ng-show="userForm.email.$touched && userForm.email.$error.required">
+                                        Email is required!
+                                    </span>
+                                    <span class="error" ng-show="userForm.email.$touched && userForm.email.$error.email">
+                                        Invalid email format!
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">Role:</label>
+                                    <select id="role" name="role" ng-model="formData.role" required>
+                                        <option value="">Select a role</option>
+                                        <option value="Developer">Developer</option>
+                                        <option value="Designer">Designer</option>
+                                        <option value="Manager">Manager</option>
+                                    </select>
+                                    <span class="error" ng-show="userForm.role.$touched && userForm.role.$error.required">
+                                        Role is required!
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Notifications:</label>
+                                    <input type="checkbox" ng-model="formData.notifications"> Receive Notifications
+                                </div>
+                                <div class="form-group">
+                                    <label>Gender:</label>
+                                    <input type="radio" name="gender" ng-model="formData.gender" value="Male" required> Male
+                                    <input type="radio" name="gender" ng-model="formData.gender" value="Female"> Female
+                                    <span class="error" ng-show="userForm.gender.$touched && userForm.gender.$error.required">
+                                        Gender is required!
+                                    </span>
+                                </div>
+                                <button type="submit" class="button" ng-disabled="userForm.$invalid">Submit</button>
+                            </form>
+                            <p ng-show="formSubmitted" class="animate-show-hide">Form submitted successfully!</p>
+                            <p ng-hide="formSubmitted" class="animate-show-hide">Form not yet submitted.</p>
+                        </div>
+                    `
+                })
+                .when('/data', {
+                    template: `
+                        <h2>Data from MySQL (Simulated)</h2>
+                        <div class="table-container">
+                            <input type="text" ng-model="searchText" placeholder="Search...">
+                            <table>
+                                <tr>
+                                    <th ng-click="sortBy('id')">ID</th>
+                                    <th ng-click="sortBy('name')">Name</th>
+                                    <th ng-click="sortBy('age')">Age</th>
+                                    <th ng-click="sortBy('city')">City</th>
+                                    <th>Row Index</th>
+                                </tr>
+                                <tr ng-repeat="person in people | filter:searchText | orderBy:sortField:reverseSort" 
+                                    ng-class="{odd: $odd, even: $even}">
+                                    <td>{{ person.id }}</td>
+                                    <td>{{ person.name }}</td>
+                                    <td>{{ person.age }}</td>
+                                    <td>{{ person.city }}</td>
+                                    <td>{{ $index + 1 }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    `
+                })
+                .otherwise({
+                    redirectTo: '/home'
+                });
+        }])
+        .directive('hasNumber', function() {
+            return {
+                require: 'ngModel',
+                link: function(scope, element, attrs, ctrl) {
+                    ctrl.$validators.hasNumber = function(modelValue, viewValue) {
+                        if (ctrl.$isEmpty(modelValue)) return true;
+                        return /\d/.test(viewValue);
+                    };
+                }
+            };
+        })
+        .controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
+            // Fetch data (simulated MySQL API)
+            $http.get('data.json').then(function(response) {
+                $scope.people = response.data;
+                console.log('Data fetched from API:', response.data);
+            }, function(error) {
+                console.error('Error fetching data:', error);
+            });
+
+            // Table Sorting
+            $scope.sortField = 'id';
+            $scope.reverseSort = false;
+            $scope.searchText = '';
+            $scope.sortBy = function(field) {
+                $scope.reverseSort = ($scope.sortField === field) ? !$scope.reverseSort : false;
+                $scope.sortField = field;
+                console.log('Sorting by:', field, 'Reverse:', $scope.reverseSort);
+            };
+
+            // Form Data and Validation
+            $scope.formData = {};
+            $scope.formSubmitted = false;
+            $scope.submitForm = function() {
+                if ($scope.userForm.$valid) {
+                    $scope.formSubmitted = true;
+                    console.log('Form submitted:', $scope.formData);
+                    alert('Form submitted successfully: ' + JSON.stringify($scope.formData));
+                } else {
+                    console.error('Form invalid');
+                }
+            };
+        }]);
+    </script>
+</body>
+</html>

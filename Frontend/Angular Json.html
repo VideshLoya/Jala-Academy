@@ -1,0 +1,139 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>AngularJS Table and Select Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .odd {
+            background-color: #f9f9f9;
+        }
+        .even {
+            background-color: #ffffff;
+        }
+        .select-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body ng-controller="MainCtrl">
+    <h2>Sortable Table with JSON Data</h2>
+    <input type="text" ng-model="searchText" placeholder="Search...">
+    <table>
+        <tr>
+            <th ng-click="sortBy('id')">ID</th>
+            <th ng-click="sortBy('name')">Name</th>
+            <th ng-click="sortBy('age')">Age</th>
+            <th ng-click="sortBy('city')">City</th>
+            <th>Row Index</th>
+        </tr>
+        <tr ng-repeat="person in people | filter:searchText | orderBy:sortField:reverseSort" 
+            ng-class="{odd: $odd, even: $even}">
+            <td>{{ person.id }}</td>
+            <td>{{ person.name }}</td>
+            <td>{{ person.age }}</td>
+            <td>{{ person.city }}</td>
+            <td>{{ $index + 1 }}</td>
+        </tr>
+    </table>
+
+    <div class="select-container">
+        <h2>Select with ng-options</h2>
+        <select ng-model="selectedPersonNgOptions" 
+                ng-options="person.name for person in people track by person.id">
+            <option value="">Select a person</option>
+        </select>
+        <p>Selected: {{ selectedPersonNgOptions | json }}</p>
+    </div>
+
+    <div class="select-container">
+        <h2>Select with ng-repeat</h2>
+        <select ng-model="selectedPersonNgRepeat">
+            <option value="">Select a person</option>
+            <option ng-repeat="person in people" value="{{person.id}}">{{person.name}}</option>
+        </select>
+        <p>Selected ID: {{ selectedPersonNgRepeat }}</p>
+    </div>
+
+    <script>
+        angular.module('myApp', [])
+        .controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
+            $scope.people = [];
+            $scope.sortField = 'id';
+            $scope.reverseSort = false;
+            $scope.searchText = '';
+            
+            // Fetch JSON data
+            $http.get('data.json').then(function(response) {
+                $scope.people = response.data;
+            });
+
+            $scope.sortBy = function(field) {
+                $scope.reverseSort = ($scope.sortField === field) ? !$scope.reverseSort : false;
+                $scope.sortField = field;
+            };
+
+            // Watch for ng-repeat select changes
+            $scope.$watch('selectedPersonNgRepeat', function(newVal) {
+                if (newVal) {
+                    $scope.selectedPersonNgRepeatObj = $scope.people.find(function(person) {
+                        return person.id === parseInt(newVal);
+                    });
+                }
+            });
+        }]);
+    </script>
+</body>
+</html>

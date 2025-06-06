@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Full Test Suite">
+    <test name="Module1 Tests">
+        <classes>
+            <class name="tests.module1.RegistrationTest"/>
+        </classes>
+    </test>
+    <test name="Data Driven Tests">
+        <classes>
+            <class name="tests.module2.DataDrivenTest"/>
+        </classes>
+    </test>
+</suite>

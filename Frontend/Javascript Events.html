@@ -1,0 +1,342 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>AngularJS and JavaScript Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        /* General Table Styles */
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .odd {
+            background-color: #f9f9f9;
+        }
+        .even {
+            background-color: #ffffff;
+        }
+        /* Image Box with Shadow and Hover */
+        .image-box {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+        .image-box:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+            transform: scale(1.05);
+            opacity: 1;
+        }
+        /* CSS Animation */
+        .animated-box {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            animation: slideIn 2s ease-in-out 1s infinite;
+            margin: 20px;
+            position: relative;
+        }
+        @keyframes slideIn {
+            0% { transform: translateX(-100px); opacity: 0.5; }
+            50% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(100px); opacity: 0.5; }
+        }
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+        .pagination a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .pagination.no-space a {
+            margin: 0;
+            border-right: none;
+        }
+        .pagination.no-space a:last-child {
+            border-right: 1px solid #ddd;
+        }
+        /* Positioning Demo */
+        .position-demo {
+            margin: 20px;
+            height: 300px;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .static { position: static; background-color: #f0f0f0; padding: 10px; margin: 5px; }
+        .relative { position: relative; top: 20px; left: 20px; background-color: #e0e0e0; padding: 10px; }
+        .absolute { position: absolute; top: 50px; right: 20px; background-color: #d0d0d0; padding: 10px; }
+        .fixed { position: fixed; bottom: 20px; right: 20px; background-color: #c0c0c0; padding: 10px; }
+        .sticky { position: sticky; top: 10px; background-color: #b0b0b0; padding: 10px; }
+        /* Overflow Scroll */
+        .overflow-container {
+            width: 300px;
+            height: 100px;
+            overflow: auto;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+        }
+        /* Form Styles */
+        .form-container {
+            margin: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        .button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body ng-controller="MainCtrl">
+    <!-- Date and Time Button -->
+    <h2>Display Current Date and Time</h2>
+    <button class="button" id="dateTimeBtn">Show Date and Time</button>
+    <p id="dateTimeDisplay"></p>
+
+    <!-- Form with Validation -->
+    <h2>Form with Validation</h2>
+    <div class="form-container">
+        <form id="myForm" ng-submit="submitForm()">
+            <input type="text" id="inputText" ng-model="formInput" placeholder="Enter text">
+            <span class="error" id="errorMsg"></span>
+            <br><br>
+            <button type="submit" class="button">Submit</button>
+        </form>
+    </div>
+
+    <!-- Cookie Demo -->
+    <h2>Cookie Management</h2>
+    <div class="form-container">
+        <button class="button" ng-click="setCookie()">Set Cookie</button>
+        <button class="button" ng-click="getCookie()">Get Cookie</button>
+        <button class="button" ng-click="checkCookie()">Check Cookie</button>
+        <p id="cookieResult"></p>
+    </div>
+
+    <!-- JSON Object Demo -->
+    <h2>JSON Object Access</h2>
+    <p>Name: {{ jsonData.name }}</p>
+    <p>Email: {{ jsonData.email }}</p>
+    <p>Role: {{ jsonData.role }}</p>
+
+    <!-- Previous Features -->
+    <h2>Image with Shadow and Hover Effect</h2>
+    <img src="https://via.placeholder.com/200" class="image-box" alt="Sample Image">
+
+    <h2>CSS Animation</h2>
+    <div class="animated-box"></div>
+
+    <h2>Sortable Table with JSON Data</h2>
+    <input type="text" ng-model="searchText" placeholder="Search...">
+    <table>
+        <tr>
+            <th ng-click="sortBy('id')">ID</th>
+            <th ng-click="sortBy('name')">Name</th>
+            <th ng-click="sortBy('age')">Age</th>
+            <th ng-click="sortBy('city')">City</th>
+            <th>Row Index</th>
+        </tr>
+        <tr ng-repeat="person in people | filter:searchText | orderBy:sortField:reverseSort" 
+            ng-class="{odd: $odd, even: $even}">
+            <td>{{ person.id }}</td>
+            <td>{{ person.name }}</td>
+            <td>{{ person.age }}</td>
+            <td>{{ person.city }}</td>
+            <td>{{ $index + 1 }}</td>
+        </tr>
+    </table>
+
+    <div class="select-container">
+        <h2>Select with ng-options</h2>
+        <select ng-model="selectedPersonNgOptions" 
+                ng-options="person.name for person in people track by person.id">
+            <option value="">Select a person</option>
+        </select>
+        <p>Selected: {{ selectedPersonNgOptions | json }}</p>
+    </div>
+
+    <div class="select-container">
+        <h2>Select with ng-repeat</h2>
+        <select ng-model="selectedPersonNgRepeat">
+            <option value="">Select a person</option>
+            <option ng-repeat="person in people" value="{{person.id}}">{{person.name}}</option>
+        </select>
+        <p>Selected ID: {{ selectedPersonNgRepeat }}</p>
+    </div>
+
+    <h2>Pagination (Hoverable with Spaces)</h2>
+    <div class="pagination">
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">Next</a>
+    </div>
+    <h2>Pagination (Hoverable without Spaces)</h2>
+    <div class="pagination no-space">
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">Next</a>
+    </div>
+
+    <h2>Positioning Demo</h2>
+    <div class="position-demo">
+        <div class="static">Static: Normal flow</div>
+        <div class="relative">Relative: Offset from normal</div>
+        <div class="absolute">Absolute: Relative to parent</div>
+        <div class="fixed">Fixed: Stays on screen</div>
+        <div class="sticky">Sticky: Sticks on scroll</div>
+    </div>
+
+    <h2>Overflow Scroll Demo</h2>
+    <div class="overflow-container">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+
+    <script>
+        angular.module('myApp', [])
+        .controller('MainCtrl', ['$scope', function($scope) {
+            // Table Data
+            $scope.people = [
+                {"id": 1, "name": "John Doe", "age": 30, "city": "New York"},
+                {"id": 2, "name": "Jane Smith", "age": 25, "city": "Los Angeles"},
+                {"id": 3, "name": "Bob Johnson", "age": 35, "city": "Chicago"},
+                {"id": 4, "name": "Alice Brown", "age": 28, "city": "Houston"}
+            ];
+            $scope.sortField = 'id';
+            $scope.reverseSort = false;
+            $scope.searchText = '';
+            
+            $scope.sortBy = function(field) {
+                $scope.reverseSort = ($scope.sortField === field) ? !$scope.reverseSort : false;
+                $scope.sortField = field;
+                console.log('Sorting by:', field, 'Reverse:', $scope.reverseSort); // Debugging
+            };
+
+            // JSON Object
+            $scope.jsonData = {
+                name: "Alice",
+                email: "alice@example.com",
+                role: "Developer"
+            };
+            console.log('JSON Data:', $scope.jsonData); // Debugging JSON object
+
+            // Form Validation
+            $scope.submitForm = function() {
+                console.log('Form submitted with input:', $scope.formInput); // Debugging
+                var input = document.getElementById('inputText').value;
+                var errorMsg = document.getElementById('errorMsg');
+                if (!input.trim()) {
+                    errorMsg.textContent = 'Input cannot be empty!';
+                    console.error('Validation failed: Input is empty'); // Debugging
+                } else {
+                    errorMsg.textContent = '';
+                    console.log('Validation passed:', input); // Debugging
+                    alert('Form submitted successfully with: ' + input);
+                }
+            };
+
+            // Cookie Functions
+            $scope.setCookie = function() {
+                document.cookie = "username=JohnDoe; expires=Fri, 13 Jun 2025 12:00:00 UTC; path=/";
+                console.log('Cookie set:', document.cookie); // Debugging
+                document.getElementById('cookieResult').textContent = 'Cookie set: username=JohnDoe';
+            };
+            $scope.getCookie = function() {
+                var cookie = document.cookie;
+                console.log('Getting cookie:', cookie); // Debugging
+                document.getElementById('cookieResult').textContent = 'Cookie: ' + cookie;
+            };
+            $scope.checkCookie = function() {
+                var cookie = document.cookie;
+                var result = cookie.includes('username=JohnDoe') ? 'Cookie exists!' : 'Cookie not found!';
+                console.log('Checking cookie:', result); // Debugging
+                document.getElementById('cookieResult').textContent = result;
+            };
+        }]);
+
+        // Date and Time Button Event Listener
+        document.getElementById('dateTimeBtn').addEventListener('click', function() {
+            var now = new Date();
+            var dateTimeString = now.toLocaleString('en-US', { 
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'full',
+                timeStyle: 'medium'
+            });
+            console.log('Date and Time clicked:', dateTimeString); // Debugging
+            document.getElementById('dateTimeDisplay').textContent = 'Current Date and Time: ' + dateTimeString;
+        });
+    </script>
+</body>
+</html>

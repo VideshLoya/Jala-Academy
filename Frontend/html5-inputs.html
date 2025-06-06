@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Input Attributes and Forms - Complete Solutions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .form-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .form-section h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .input-group {
+            margin: 15px 0;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .marquee-container {
+            border: 1px solid #333;
+            height: 100px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            margin: 10px 0;
+        }
+        iframe {
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML5 Input Attributes and Forms - Complete Solutions</h1>
+
+    <div class="form-section">
+        <h2>Problem 1: Basic Input Types</h2>
+        <form>
+            <div class="input-group">
+                <label for="text-input">Text Input:</label>
+                <input type="text" id="text-input" name="text-input" placeholder="Enter text here">
+            </div>
+            
+            <div class="input-group">
+                <label for="password-input">Password:</label>
+                <input type="password" id="password-input" name="password-input" placeholder="Enter password">
+            </div>
+            
+            <div class="input-group">
+                <label>Radio Buttons:</label>
+                <input type="radio" id="radio1" name="gender" value="male">
+                <label for="radio1">Male</label>
+                <input type="radio" id="radio2" name="gender" value="female">
+                <label for="radio2">Female</label>
+                <input type="radio" id="radio3" name="gender" value="other">
+                <label for="radio3">Other</label>
+            </div>
+            
+            <div class="input-group">
+                <label>Checkboxes:</label>
+                <input type="checkbox" id="cb1" name="interests" value="coding">
+                <label for="cb1">Coding</label>
+                <input type="checkbox" id="cb2" name="interests" value="reading">
+                <label for="cb2">Reading</label>
+                <input type="checkbox" id="cb3" name="interests" value="gaming">
+                <label for="cb3">Gaming</label>
+            </div>
+            
+            <div class="input-group">
+                <input type="submit" value="Submit Form">
+                <input type="reset" value="Reset Form">
+                <input type="button" value="Custom Button" onclick="alert('Custom button clicked!')">
+            </div>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Problem 2: HTML5 Input Types</h2>
+        <form>
+            <div class="input-group">
+                <label for="number-input">Number:</label>
+                <input type="number" id="number-input" name="number-input" min="1" max="100" step="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="range-input">Range:</label>
+                <input type="range" id="range-input" name="range-input" min="0" max="100" value="50">
+                <span id="range-value">50</span>
+            </div>
+            
+            <div class="input-group">
+                <label for="color-input">Color:</label>
+                <input type="color" id="color-input" name="color-input" value="#ff0000">
+            </div>
+            
+            <div class="input-group">
+                <label for="date-input">Date:</label>
+                <input type="date" id="date-input" name="date-input">
+            </div>
+            
+            <div class="input-group">
+                <label for="time-input">Time:</label>
+                <input type="time" id="time-input" name="time-input">
+            </div>
+            
+            <div class="input-group">
+                <label for="month-input">Month:</label>
+                <input type="month" id="month-input" name="month-input">
+            </div>
+            
+            <div class="input-group">
+                <label for="week-input">Week:</label>
+                <input type="week" id="week-input" name="week-input">
+            </div>
+            
+            <div class="input-group">
+                <label for="email-input">Email:</label>
+                <input type="email" id="email-input" name="email-input" placeholder="user@example.com">
+            </div>
+            
+            <div class="input-group">
+                <label for="file-input">File:</label>
+                <input type="file" id="file-input" name="file-input" multiple>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Problem 3: Input Restrictions</h2>
+        <form>
+            <div class="input-group">
+                <label for="disabled-input">Disabled Input:</label>
+                <input type="text" id="disabled-input" name="disabled-input" value="Cannot edit this" disabled>
+            </div>
+            
+            <div class="input-group">
+                <label for="readonly-input">Readonly Input:</label>
+                <input type="text" id="readonly-input" name="readonly-input" value="Cannot edit this either" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label for="required-input">Required Input:</label>
+                <input type="text" id="required-input" name="required-input" placeholder="This field is required" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="maxlength-input">Max Length (10):</label>
+                <input type="text" id="maxlength-input" name="maxlength-input" maxlength="10" placeholder="Max 10 chars">
+            </div>
+            
+            <div class="input-group">
+                <label for="size-input">Size (30):</label>
+                <input type="text" id="size-input" name="size-input" size="30" placeholder="Size attribute set to 30">
+            </div>
+            
+            <div class="input-group">
+                <label for="min-max-number">Number (1-10):</label>
+                <input type="number" id="min-max-number" name="min-max-number" min="1" max="10" value="5">
+            </div>
+            
+            <div class="input-group">
+                <label for="value-input">Default Value:</label>
+                <input type="text" id="value-input" name="value-input" value="Default text here">
+            </div>
+            
+            <div class="input-group">
+                <input type="submit" value="Submit with Validation">
+            </div>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Problem 4: Target Attribute Examples</h2>
+        <h3>Link Target Examples:</h3>
+        <ul>
+            <li><a href="https://www.google.com" target="_blank">Open Google in New Tab (_blank)</a></li>
+            <li><a href="https://www.github.com" target="_self">Open GitHub in Same Tab (_self)</a></li>
+            <li><a href="https://www.stackoverflow.com" target="_parent">Open Stack Overflow in Parent Frame (_parent)</a></li>
+            <li><a href="https://www.w3schools.com" target="_top">Open W3Schools in Full Window (_top)</a></li>
+        </ul>
+        
+        <h3>Form Target Example:</h3>
+        <form action="#" method="post" target="_blank">
+            <input type="text" name="search" placeholder="Search term">
+            <input type="submit" value="Search in New Tab">
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Problem 5: IFrames and Marquee</h2>
+        
+        <h3>IFrame Examples:</h3>
+        <p>Embedding a webpage using iframe:</p>
+        <iframe src="https://www.w3schools.com/html/html_iframe.asp" 
+                width="600" height="300" 
+                title="W3Schools HTML IFrame Tutorial">
+            <p>Your browser does not support iframes.</p>
+        </iframe>
+        
+        <br><br>
+        
+        <p>Embedding a YouTube video:</p>
+        <iframe width="560" height="315" 
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+        
+        <h3>Marquee Examples:</h3>
+        <div class="marquee-container">
+            <marquee behavior="scroll" direction="left" scrollamount="3">
+                This text scrolls from right to left continuously...
+            </marquee>
+        </div>
+        
+        <div class="marquee-container">
+            <marquee behavior="slide" direction="up" scrollamount="2">
+                This text slides up once and stops...
+            </marquee>
+        </div>
+        
+        <div class="marquee-container">
+            <marquee behavior="alternate" direction="left" scrollamount="4">
+                This text bounces left and right...
+            </marquee>
+        </div>
+        
+        <marquee bgcolor="#ffff00" width="400" height="50" scrollamount="5">
+            <strong>Colorful marquee with custom styling!</strong>
+        </marquee>
+    </div>
+
+    <div class="form-section">
+        <h2>Advanced Form Examples</h2>
+        
+        <h3>Complex Form with Validation:</h3>
+        <form id="advanced-form" novalidate>
+            <fieldset>
+                <legend>Personal Information</legend>
+                
+                <div class="input-group">
+                    <label for="full-name">Full Name:</label>
+                    <input type="text" id="full-name" name="full-name" required minlength="3" maxlength="50">
+                </div>
+                
+                <div class="input-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" min="18" max="100" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="phone">Phone:</label>
+                    <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="1234567890">
+                </div>
+                
+                <div class="input-group">
+                    <label for="website">Website:</label>
+                    <input type="url" id="website" name="website" placeholder="https://example.com">
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Preferences</legend>
+                
+                <div class="input-group">
+                    <label for="country">Country:</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select a country</option>
+                        <option value="us">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ca">Canada</option>
+                        <option value="au">Australia</option>
+                        <option value="in">India</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bio">Bio:</label>
+                    <textarea id="bio" name="bio" rows="4" cols="50" maxlength="200" placeholder="Tell us about yourself..."></textarea>
+                </div>
+            </fieldset>
+            
+            <div class="input-group">
+                <input type="submit" value="Submit Advanced Form">
+                <input type="reset" value="Clear Form">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Range input value display
+        const rangeInput = document.getElementById('range-input');
+        const rangeValue = document.getElementById('range-value');
+        
+        rangeInput.addEventListener('input', function() {
+            rangeValue.textContent = this.value;
+        });
+
+        // Advanced form validation
+        document.getElementById('advanced-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            let isValid = true;
+            let errors = [];
+            
+            // Custom validation
+            const fullName = formData.get('full-name');
+            if (fullName && fullName.length < 3) {
+                errors.push('Full name must be at least 3 characters');
+                isValid = false;
+            }
+            
+            const age = formData.get('age');
+            if (age && (age < 18 || age > 100)) {
+                errors.push('Age must be between 18 and 100');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                alert('Form submitted successfully!');
+                console.log('Form data:', Object.fromEntries(formData));
+            } else {
+                alert('Form validation errors:\n' + errors.join('\n'));
+            }
+        });
+    </script>
+</body>
+</html>

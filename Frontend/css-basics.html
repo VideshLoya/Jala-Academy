@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Basics - Complete Solutions</title>
+    <style>
+        /* Problem 1: CSS Comments */
+        /* This is a single line CSS comment */
+        
+        /*
+        This is a multi-line CSS comment
+        that spans multiple lines
+        and explains the styling below
+        */
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .section h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        /* Problem 2: Background Properties */
+        .background-demo {
+            background-color: #e3f2fd; /* Light blue background */
+            background-image: url('https://via.placeholder.com/200x200/4CAF50/white?text=BG+Image');
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Image doesn't scroll with page */
+            background-position: top right;
+            background-size: 200px 200px; /* Specify background image size */
+            min-height: 300px;
+            padding: 20px;
+        }
+        
+        /* Problem 3: Border Styles */
+        .border-demo {
+            /* Different borders on each side with different patterns */
+            border-top: 5px solid red;        /* Solid red top border */
+            border-right: 8px dashed blue;    /* Dashed blue right border */
+            border-bottom: 6px dotted green;  /* Dotted green bottom border */
+            border-left: 10px double purple;  /* Double purple left border */
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .border-styles-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .border-style {
+            width: 150px;
+            height: 100px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .solid { border: 4px solid #333; }
+        .dashed { border: 4px dashed #e91e63; }
+        .dotted { border: 4px dotted #2196f3; }
+        .double { border: 6px double #ff9800; }
+        .groove { border: 6px groove #9c27b0; }
+        .ridge { border: 6px ridge #00bcd4; }
+        .inset { border: 6px inset #4caf50; }
+        .outset { border: 6px outset #f44336; }
+        
+        /* Problem 4: Height and Width in pixels and percentages */
+        .dimensions-demo {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .box-pixels {
+            width: 200px;      /* Width in pixels */
+            height: 150px;     /* Height in pixels */
+            background-color: #ffcdd2;
+            border: 2px solid #f44336;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .box-percentage {
+            width: 45%;        /* Width in percentage */
+            height: 150px;     /* Height can be mixed units */
+            background-color: #c8e6c9;
+            border: 2px solid #4caf50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container-percentage {
+            width: 100%;       /* Full width container */
+            height: 200px;     /* Fixed height container */
+            background-color: #e1f5fe;
+            border: 2px solid #03a9f4;
+            position: relative;
+        }
+        
+        .inner-percentage {
+            width: 70%;        /* 70% of parent width */
+            height: 60%;       /* 60% of parent height */
+            background-color: #fff3e0;
+            border: 2px solid #ff9800;
+            position: absolute;
+            top: 20%;
+            left: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Problem 5: Font Properties */
+        .font-demo {
+            margin: 20px 0;
+        }
+        
+        .font-style-italic {
+            font-style: italic;
+            font-size: 18px;
+            font-family: Georgia, serif;
+            color: #e91e63;
+            text-align: left;
+        }
+        
+        .font-style-normal {
+            font-style: normal;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            color: #2196f3;
+            text-align: center;
+        }
+        
+        .font-style-oblique {
+            font-style: oblique;
+            font-size: 20px;
+            font-family: 'Times New Roman', serif;
+            color: #ff9800;
+            text-align: right;
+        }
+        
+        .font-sizes {
+            margin: 15px 0;
+        }
+        
+        .size-12 { font-size: 12px; }
+        .size-16 { font-size: 16px; }
+        .size-20 { font-size: 20px; }
+        .size-24 { font-size: 24px; }
+        .size-2em { font-size: 2em; }
+        .size-150percent { font-size: 150%; }
+        
+        .font-families {
+            margin: 15px 0;
+        }
+        
+        .serif { font-family: 'Times New Roman', serif; }
+        .sans-serif { font-family: Arial, sans-serif; }
+        .monospace { font-family: 'Courier New', monospace; }
+        .cursive { font-family: cursive; }
+        .fantasy { font-family: fantasy; }
+        
+        .text-colors {
+            margin: 15px 0;
+        }
+        
+        .color-red { color: red; }
+        .color-blue { color: #0066cc; }
+        .color-green { color: rgb(0, 128, 0); }
+        .color-purple { color: hsl(270, 100%, 50%); }
+        
+        .text-alignments {
+            margin: 15px 0;
+        }
+        
+        .align-left { text-align: left; background-color: #f0f0f0; padding: 10px; }
+        .align-center { text-align: center; background-color: #f5f5f5; padding: 10px; }
+        .align-right { text-align: right; background-color: #fafafa; padding: 10px; }
+        .align-justify { text-align: justify; background-color: #f8f8f8; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>CSS Basics - Complete Solutions</h1>
+
+    <div class="section">
+        <h2>Problem 1: CSS Comments</h2>
+        <p>CSS comments have been added throughout this stylesheet. Check the source code to see examples of:</p>
+        <ul>
+            <li>Single line comments using /* comment */</li>
+            <li>Multi-line comments spanning multiple lines</li>
+            <li>Comments explaining the purpose of different CSS rules</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Problem 2: Background Properties</h2>
+        <div class="background-demo">
+            <h3>Background Demonstration</h3>
+            <p>This section demonstrates:</p>
+            <ul>
+                <li><strong>background-size:</strong> Image size set to 200px x 200px</li>
+            </ul>
+            <p>Scroll the page to see how the background image stays fixed while content scrolls.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Problem 3: Border Styles</h2>
+        
+        <div class="border-demo">
+            <h3>Different Borders on Each Side</h3>
+            <p>This box demonstrates different border styles on each side:</p>
+            <ul>
+                <li>Top: 5px solid red</li>
+                <li>Right: 8px dashed blue</li>
+                <li>Bottom: 6px dotted green</li>
+                <li>Left: 10px double purple</li>
+            </ul>
+        </div>
+        
+        <h3>All Border Style Types</h3>
+        <div class="border-styles-demo">
+            <div class="border-style solid">Solid</div>
+            <div class="border-style dashed">Dashed</div>
+            <div class="border-style dotted">Dotted</div>
+            <div class="border-style double">Double</div>
+            <div class="border-style groove">Groove</div>
+            <div class="border-style ridge">Ridge</div>
+            <div class="border-style inset">Inset</div>
+            <div class="border-style outset">Outset</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Problem 4: Height and Width (Pixels and Percentages)</h2>
+        
+        <h3>Fixed Dimensions (Pixels)</h3>
+        <div class="dimensions-demo">
+            <div class="box-pixels">
+                <div>
+                    <strong>200px × 150px</strong><br>
+                    Fixed pixel dimensions
+                </div>
+            </div>
+            <div class="box-percentage">
+                <div>
+                    <strong>45% × 150px</strong><br>
+                    Mixed units
+                </div>
+            </div>
+        </div>
+        
+        <h3>Percentage Dimensions</h3>
+        <div class="container-percentage">
+            <div class="inner-percentage">
+                <div>
+                    <strong>70% × 60%</strong><br>
+                    Percentage of parent
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Problem 5: Font Properties</h2>
+        
+        <div class="font-demo">
+            <h3>Font Styles</h3>
+            <p class="font-style-italic">This text uses italic font-style, 18px size, Georgia serif family, pink color, left alignment</p>
+            <p class="font-style-normal">This text uses normal font-style, 16px size, Arial sans-serif family, blue color, center alignment</p>
+            <p class="font-style-oblique">This text uses oblique font-style, 20px size, Times New Roman serif family, orange color, right alignment</p>
+            
+            <h3>Font Sizes</h3>
+            <div class="font-sizes">
+                <p class="size-12">Font size: 12px</p>
+                <p class="size-16">Font size: 16px</p>
+                <p class="size-20">Font size: 20px</p>
+                <p class="size-24">Font size: 24px</p>
+                <p class="size-2em">Font size: 2em (relative to parent)</p>
+                <p class="size-150percent">Font size: 150% (relative to parent)</p>
+            </div>
+            
+            <h3>Font Families</h3>
+            <div class="font-families">
+                <p class="serif">Serif font family (Times New Roman)</p>
+                <p class="sans-serif">Sans-serif font family (Arial)</p>
+                <p class="monospace">Monospace font family (Courier New)</p>
+                <p class="cursive">Cursive font family</p>
+                <p class="fantasy">Fantasy font family</p>
+            </div>
+            
+            <h3>Text Colors</h3>
+            <div class="text-colors">
+                <p class="color-red">Red color using color name</p>
+                <p class="color-blue">Blue color using hex code (#0066cc)</p>
+                <p class="color-green">Green color using RGB (rgb(0, 128, 0))</p>
+                <p class="color-purple">Purple color using HSL (hsl(270, 100%, 50%))</p>
+            </div>
+            
+            <h3>Text Alignment</h3>
+            <div class="text-alignments">
+                <p class="align-left">This text is aligned to the left. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <p class="align-center">This text is centered. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <p class="align-right">This text is aligned to the right. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <p class="align-justify">This text is justified, which means it's aligned to both left and right margins. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Additional CSS Examples</h2>
+        
+        <h3>Advanced Background Properties</h3>
+        <div style="
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            height: 100px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 20px 0;
+        ">
+            Linear Gradient Background
+        </div>
+        
+        <div style="
+            background: radial-gradient(circle, #ff9a9e, #fecfef);
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+            margin: 20px auto;
+            width: 200px;
+        ">
+            Radial Gradient
+        </div>
+        
+        <h3>Multiple Background Images</h3>
+        <div style="
+            background-image: 
+                url('https://via.placeholder.com/100x100/ff0000/ffffff?text=1'),
+                url('https://via.placeholder.com/100x100/00ff00/ffffff?text=2'),
+                url('https://via.placeholder.com/100x100/0000ff/ffffff?text=3');
+            background-position: 
+                top left,
+                top right,
+                bottom center;
+            background-repeat: no-repeat;
+            background-size: 100px 100px;
+            height: 200px;
+            border: 2px solid #333;
+            position: relative;
+        ">
+            <div style="
+                position: absolute;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255,255,255,0.8);
+                padding: 5px 15px;
+                border-radius: 15px;
+            ">
+                Multiple Background Images
+            </div>
+        </div>
+    </div>
+</body>
+</html>color:</strong> Light blue background (#e3f2fd)</li>
+                <li><strong>background-image:</strong> Placeholder image in top-right corner</li>
+                <li><strong>background-attachment: fixed</strong> - Image doesn't scroll with page</li>
+                <li><strong>background-
